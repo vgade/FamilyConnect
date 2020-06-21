@@ -1,0 +1,34 @@
+<div class="add-family-container">
+    <mat-toolbar>
+        <mat-toolbar-row class="spacer">
+            <button mat-mini-fab color="primary" >
+                <mat-icon>back</mat-icon>
+            </button>
+            <span >New Family</span>
+            <button mat-mini-fab color="primary" >
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div>
+        <div>
+            <img [src]="family.pic"/>
+        </div>
+        <div>
+            <mat-form-field appearance="outline">
+                <mat-label>Family Name</mat-label>
+                <input matInput placeholder="Family Name" [(ngModel)]="family.name" required >
+                <mat-hint></mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>About</mat-label>
+                <textarea matInput placeholder="About Family" [(ngModel)]="family.about" ></textarea>
+                <mat-hint></mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+    <div>
+        <button class="sign-in-btn" mat-flat-button color="primary" (click)="addFamily()">Add Family</button>
+    </div>
+</div>
+

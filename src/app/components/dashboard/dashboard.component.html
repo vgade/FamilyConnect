@@ -1,0 +1,45 @@
+<div class="dashboard-container">
+    <mat-toolbar>
+        <mat-toolbar-row class="spacer">
+            <button mat-mini-fab color="primary" >
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span >My Family</span>
+            <button mat-mini-fab color="primary" >
+                <mat-icon>search</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div>
+        <h3>Welcome</h3>
+        <span>{{user.firstName}} {{user.lastName}}</span>
+        <div>
+            <button mat-flat-button color="primary" (click)="addFamily()">
+                + Family
+            </button>
+            <button mat-flat-button disabled="" color="primary" (click)="addMember()">
+                + Member
+            </button>
+        </div>
+    </div>
+    <div>
+        <h4>Favourites</h4>
+        <div *ngIf="favourites.length == 0">No Favourites Members</div>
+        <ul *ngFor="let member in favourites">
+            <li (click)="viewMember(member)">
+                <img src="member.pic"/>
+                <span>{{member.firstName}} {{member.lastName}}</span>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <h4>Your Families</h4>
+        <div *ngIf="families.length == 0">No Families</div>
+        <ul>
+            <li *ngFor="let family of families" (click)="viewFamily(family)">
+                <img [src]="family.pic"/>
+                <span>{{family.name}} Family</span>
+            </li>
+        </ul>
+    </div>
+</div>
