@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticateService } from '@services/authenticate/authenticate.service';
 import { Member } from '@app/models/member.model';
 import { Router } from '@angular/router';
+import { FirebaseService } from '@app/services/firebase/firebase.service';
 
 @Component({
   selector: 'app-register',
@@ -13,18 +14,24 @@ export class RegisterComponent implements OnInit {
   member:Member;
   keypassword:string;
 
-  constructor(private authenticateService:AuthenticateService, private router:Router) { }
+  constructor(private authenticateService:AuthenticateService, private router:Router, private firebaseSer:FirebaseService) { }
 
   ngOnInit(): void {
     this.member = new Member();
-    if(this.authenticateService.isSignedIn){
-      this.member = this.authenticateService.loggedInUser;
-    }
+    this.member = this.member.deserialize(this.member);
+
+    this.firebaseSer.userAuthenticated$.subscribe(() => {
+      if(this.authenticateService.isSignedIn){
+        this.member = this.authenticateService.loggedInUser;
+      }
+    });
   }
 
   signUp(){
     if(this.authenticateService.isSignedIn){
-      this.authenticateService.recordLoggedInUser();
+      this.authenticateService.recordLoggedInUser().then(()=>{
+        this.router.navigate(["dashboard"]);
+      });
     }else{
       this.authenticateService.signUpWithEmail(this.member, this.keypassword);
     }

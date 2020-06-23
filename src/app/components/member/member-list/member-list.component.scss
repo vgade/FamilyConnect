@@ -1,0 +1,15 @@
+.member-list-container{
+    .header{
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+    }
+    .member-item{
+        div{
+            text-align: center;
+        }
+    }
+    .no-data{
+        text-align: center;
+    }
+}

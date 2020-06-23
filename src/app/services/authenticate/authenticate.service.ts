@@ -4,6 +4,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { SignInMethod } from '@app/constants/sign-in-method';
 import { Member } from '@app/models/member.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthenticateService {
   loggedInUser:Member;
   isSignedIn:boolean=false;
 
-  constructor() { 
+  constructor(private router:Router) { 
     this.googleAuthProvider = new firebase.auth.GoogleAuthProvider();
     this.googleAuthProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
@@ -69,9 +70,15 @@ export class AuthenticateService {
         // The signed-in user info.
         this.setUpLoggedInUser(result.user);
         console.log(JSON.stringify(result.user));
-        this.recordLoggedInUser().then(()=>{
-          resolve();
+        let userRef = firebase.firestore().collection('members').doc(result.user.uid);
+        userRef.get().then((querySnapshot) => {
+          if(querySnapshot.data()){
+            resolve();
+          }else{
+            this.router.navigate(['register']);
+          }
         })
+        
       }).catch((error) => {
         // Handle Errors here.
         var errorCode = error.code;
@@ -87,9 +94,13 @@ export class AuthenticateService {
 
   setUpLoggedInUser(user){
     this.loggedInUser = new Member();
+    this.loggedInUser.deserialize(this.loggedInUser);
     this.loggedInUser.email = user.email;
     this.loggedInUser.firstName = user.displayName;
     this.loggedInUser.uid = user.uid;
+
+    delete this.loggedInUser.families;
+    
     if(user instanceof Member){
       this.loggedInUser.deserialize(user);
     }

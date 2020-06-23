@@ -1,0 +1,33 @@
+<div class="create-family-container">
+    <mat-toolbar>
+        <mat-toolbar-row class="spacer">
+            <button mat-mini-fab color="primary" (click)="cancel()">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+            <span>New Family</span>
+            <button mat-mini-fab color="primary" (click)="createFamily()">
+                <mat-icon>save</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div>
+        <app-image-uploader [object]="family" [upload]="true"></app-image-uploader>
+        <mat-grid-list class="mt-3  " cols="1" rowHeight="100px" >
+            <mat-grid-tile>
+                <mat-form-field class="form-field" appearance="outline">
+                    <mat-label>Family Name</mat-label>
+                    <input matInput placeholder="Family Name" [(ngModel)]="family.name" required >
+                    <mat-hint></mat-hint>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field class="form-field"  appearance="outline">
+                    <mat-label>About</mat-label>
+                    <textarea matInput placeholder="About Family" [(ngModel)]="family.about" ></textarea>
+                    <mat-hint></mat-hint>
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</div>
+

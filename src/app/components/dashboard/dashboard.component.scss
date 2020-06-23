@@ -1,4 +1,13 @@
 .dashboard-container{
+    .welcome{
+        .title{
+            display: inline;
+        }
+        .button-container{
+            display: flex;
+            justify-content: space-around;
+        }
+    }
     .spacer{
         justify-content: space-between;
         display: flex;

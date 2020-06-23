@@ -1,0 +1,20 @@
+<div class="mt-3 family-list-container" >
+    <div class="header">
+        <h2>{{title}}</h2>
+        <button *ngIf="enableAddFamily" mat-button color="primary" (click)="searchFamilies()">
+            <mat-icon>add_circle</mat-icon>
+            Family
+        </button>
+    </div>
+    
+    <div class="no-data py-3" *ngIf="families.length == 0">No Families</div>
+    <mat-grid-list cols="2" rowHeight="1:1" >
+        <mat-grid-tile *ngFor="let family of families" (click)="viewFamily(family)">
+            <div class="family-item">
+                <mat-checkbox (change) = "familySelectionChange($event, family)" *ngIf="selectionMode"></mat-checkbox>
+                <app-image-uploader [object]="family" [upload]="false"></app-image-uploader>
+                <div>{{family.name}} Family</div>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

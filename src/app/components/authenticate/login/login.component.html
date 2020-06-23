@@ -1,11 +1,12 @@
 <div class="login-container">
-    <div>
-        <img src="../../../../assets/images/family-connect-logo.png"/>
+    <div class="logo-box">
+        <img src="../../../../assets/images/family-connect-logo.png" class="big-image"  />
     </div>
     <div class="content">
-        <div class="email-container">
-            <div class="email">
-                <mat-form-field class="email-control" appearance="outline">
+        <mat-grid-list class="mt-3  " cols="1" rowHeight="75px">
+            <mat-grid-tile>
+                <mat-form-field  class="form-field email-control" appearance="outline">
+                    <mat-label>Email</mat-label>
                     <input matInput  #emailId placeholder="Enter Email Address" [(ngModel)]="email" required name="email" type="email" >
                     <mat-hint></mat-hint>
                     <!-- <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
@@ -15,9 +16,10 @@
                     Email is <strong>required</strong>
                     </mat-error> -->
                 </mat-form-field>
-            </div>
-            <div class="password">
-                <mat-form-field class="password-control"  appearance="outline">
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field class="form-field" appearance="outline">
+                    <mat-label>Password</mat-label>
                     <input #password matInput placeholder="Enter Password" [(ngModel)]="passwordkey"  required [type]="hide ? 'password' : 'text'" name="password">
                     <mat-icon matSuffix class="mr-3" (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                     <!-- <mat-icon class="login-action" matSuffix *ngIf="!loginService.isSMSSent == true" (click)="login()">arrow_forward</mat-icon> -->
@@ -30,20 +32,21 @@
                     </mat-error>
                     <small  *ngIf="isWrongPassword" style="color:red">Password is <strong>incorrect</strong></small> -->
                 </mat-form-field>
-            </div>
-            <div> 
-                <button class="sign-in-btn" mat-flat-button color="primary" (click)="signInWithEmail()">Sign In</button>
-                <h3>Don't have an account?</h3>
-                <h5 (click)="register()">Register</h5>
-            </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+        <div class="sign-in-footer px-3"> 
+            <button class="sign-in-btn" mat-flat-button color="primary" (click)="signInWithEmail()">Sign In</button>
             <div>
-                <div>Sign In with</div>
-                <div>
-                    <img src="../../../../assets/images/google.png" (click)="signInWithGoogle()"/>
-                    <img src="../../../../assets/images/facebook.png" (click)="signInWithFacebook()"/>
-                </div>
+                <div>Don't have an account?</div>
+                <div class="register" (click)="register()">Register</div>
             </div>
-            
+        </div>
+        <div class="other-sign-in mt-3 mx-3 pt-3">
+            <div style="text-align: center;"><b>Sign In with</b></div>
+            <div class="social pt-3">
+                <img src="../../../../assets/images/google.png" class="xsmall-image mr-3" (click)="signInWithGoogle()"/>
+                <img src="../../../../assets/images/facebook.png" class="xsmall-image ml-3" (click)="signInWithFacebook()"/>
+            </div>
         </div>
     </div>
 </div>

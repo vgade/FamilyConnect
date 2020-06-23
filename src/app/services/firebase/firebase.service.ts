@@ -5,6 +5,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { Member } from '@app/models/member.model';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,14 @@ import { Member } from '@app/models/member.model';
 export class FirebaseService {
   firebaseAuthMethod:any;
   fireStoreDb: firebase.firestore.Firestore;
+  userAuthenticated$:Observable<Member>;
+  _userAuthenticatedSource:Subject<Member>;
+
 
 
   constructor(private authenticateService:AuthenticateService, private router:Router) { 
+    this._userAuthenticatedSource = new Subject<Member>();
+    this.userAuthenticated$ = this._userAuthenticatedSource.asObservable();
   }
 
   initializeAuthStateChange(){
@@ -27,10 +33,10 @@ export class FirebaseService {
           userRef.get().then((querySnapshot) => {
               if(querySnapshot.data()){
                 this.authenticateService.setUpLoggedInUser(new Member().deserialize(querySnapshot.data()));
-                this.router.navigate(['dashboard']);
+                this.router.navigate(['dashboard']).then(this.triggerAuthentication.bind(this));
               }else{
                 this.authenticateService.setUpLoggedInUser(dbUser);
-                this.router.navigate(['register']);
+                this.router.navigate(['register']).then(this.triggerAuthentication.bind(this));
               }
             });
         }
@@ -41,5 +47,12 @@ export class FirebaseService {
         }
       });
     }
+  }
+
+  triggerAuthentication(){
+    setTimeout(() => {
+      this._userAuthenticatedSource.next();
+    }, 100)
+    
   }
 }

@@ -1,0 +1,11 @@
+.search-member{
+    .spacer{
+        justify-content: space-between;
+        display: flex;
+    }
+    .search-box{
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        width: 65%;
+    }
+}

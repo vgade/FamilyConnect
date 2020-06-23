@@ -1,0 +1,15 @@
+.family-list-container{
+    .header{
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+    }
+    .family-item{
+        div{
+            text-align: center;
+        }
+    }
+    .no-data{
+        text-align: center;
+    }
+}

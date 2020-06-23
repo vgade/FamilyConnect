@@ -1,0 +1,14 @@
+<div class="image-uploader">
+    <div class="image">
+        <img [src]="object.picUrl" [ngClass]="{'big-image':upload, 'small-image' : !upload}"/>
+    </div>
+    <div class="upload-text" *ngIf="upload">
+        <div *ngIf="uploading">Uploading Image...</div>
+        <button *ngIf="!uploading" mat-button color="primary" (click)="imageInput.click()">Upload Image</button>
+        <input #imageInput
+        style="display: none"
+        type="file"
+        accept="image/*"
+        (change)="processFile(imageInput)" #imageInput>
+    </div>
+</div>

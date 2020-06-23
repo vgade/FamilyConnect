@@ -1,4 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import '~bootstrap/scss/bootstrap-reboot';
+@import '~bootstrap/scss/bootstrap-grid';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+h1,h2,h3,h4{
+    margin-bottom: 0px !important;
+}
+
+.big-image{
+    width: 175px;
+    height: 175px;
+    border-radius: 50%;
+}
+
+.small-image{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.xsmall-image{
+    width: 75px;
+    height: 75px;
+}
+
+.form-field{
+    width: 80%;
+    max-width: 300px;
+}
+
+.spacer{
+    justify-content: space-between;
+    display: flex;
+}

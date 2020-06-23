@@ -2,47 +2,85 @@ import { Injectable } from '@angular/core';
 import { AuthenticateService } from '@services/authenticate/authenticate.service';
 import { Family } from '@app/models/family.model';
 import * as firebase from 'firebase';
-import 'firebase/auth';
 import 'firebase/firestore';
 import { Member } from '@app/models/member.model';
 import { Observable } from 'rxjs';
-import { query } from '@angular/animations';
+import { ImageService } from '@services/image/image.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FamilyService {
 
-  constructor(private authenticateSer:AuthenticateService) { }
+  constructor(private authenticateSer:AuthenticateService, private imageService:ImageService) { }
 
-  fetchFamiles(userId:string):Observable<Family>{
-    let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('members').doc(userId);
+  fetchFamiles(memberId:string):Observable<Family>{
+    let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('members').doc(memberId);
     return new Observable( subscriber =>{
       userRef.get().then((querySnapshot)=>{
         let member:Member = new Member()
         member.deserialize(querySnapshot.data());
-        member.familyIds.forEach((familyId:string) => {
-          let familyRef:firebase.firestore.DocumentReference = firebase.firestore().collection('families').doc(familyId);
-          familyRef.get().then((queryData) => {
-            let family:Family = new Family();
-            family.deserialize(queryData.data());
-            subscriber.next(family);
+        if(member.familyIds && member.familyIds.length > 0){
+          member.familyIds.forEach((familyId:string) => {
+            let familyRef:firebase.firestore.DocumentReference = firebase.firestore().collection('families').doc(familyId);
+            familyRef.get().then((queryData) => {
+              let family:Family = new Family();
+              family.deserialize(queryData.data());
+              family.uid = queryData.id;
+              subscriber.next(family);
+              this.fetchImage(family);
+            });
           });
-        });
+        }
       });
     });
   }
-  addNewFamily(family:Family) :Promise<Family>{
+
+  fetchImage(family:Family){
+    if(family.pic.indexOf('default') !== -1){
+      family.picUrl = family.pic;
+    }else{
+      this.imageService.getDownloadURL(family.pic).then((url) => {
+        family.picUrl = url;
+      })
+    }
+  }
+  
+  createNewFamily(family:Family, loggedInUserFamily:boolean = false) :Promise<Family>{
+    delete  family.picUrl;
+    delete family.members;
     return new Promise((resolve, reject) => {
       firebase.firestore().collection('families').add(JSON.parse(JSON.stringify(family))).then((familyData)=>{
-        let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('members').doc(this.authenticateSer.loggedInUser.uid);
-        // Atomically add a new region to the "regions" array field.
-        userRef.update({
-          familyIds: firebase.firestore.FieldValue.arrayUnion(familyData.id)
-        }).then(() => {
           resolve();
-        });
       });
     })
+  }
+
+  addNewFamilies(memberId:string, families:string[]): Promise<Member> {
+    return new Promise((resolve, reject) => {
+      let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('members').doc(memberId);
+      userRef.update({
+        familyIds: firebase.firestore.FieldValue.arrayUnion(...families)
+      }).then(() => {
+        resolve();
+      });
+    })
+  }
+
+  searchFamilies(name:string): Observable<Family>{
+    return new Observable((subscriber) => {
+      let familyRef:firebase.firestore.Query = firebase.firestore().collection('families').where('name', '>=', name);
+      familyRef.get().then((querySnapshot:firebase.firestore.QuerySnapshot)=>{
+        if(querySnapshot.size > 0){
+          let counter = 1;
+          querySnapshot.forEach((queryData:firebase.firestore.QueryDocumentSnapshot)=>{
+            let family:Family = new Family().deserialize(queryData.data());
+            family.uid = queryData.id;
+            subscriber.next(family);
+            this.fetchImage(family);
+          })
+        }
+      })
+    });
   }
 }

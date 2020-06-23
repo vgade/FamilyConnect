@@ -15,7 +15,15 @@ import {MatIconModule} from '@angular/material/icon';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MatButtonModule } from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { AddFamilyComponent } from './components/family/add-family/add-family.component';
+import { FamilyListComponent } from './components/family/family-list/family-list.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { CreateMemberComponent } from './components/member/create-member/create-member.component';
+import { SearchFamilyComponent } from './components/family/search-family/search-family.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { CreateFamilyComponent } from './components/family/create-family/create-family.component';
+import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
+import { MemberListComponent } from './components/member/member-list/member-list.component';
+import { SearchMemberComponent } from './components/member/search-member/search-member.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +31,13 @@ import { AddFamilyComponent } from './components/family/add-family/add-family.co
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
-    AddFamilyComponent
+    CreateFamilyComponent,
+    FamilyListComponent,
+    CreateMemberComponent,
+    SearchFamilyComponent,
+    ImageUploaderComponent,
+    MemberListComponent,
+    SearchMemberComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +50,9 @@ import { AddFamilyComponent } from './components/family/add-family/add-family.co
     MatNativeDateModule,
     MatIconModule,
     MatButtonModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatGridListModule,
+    MatCheckboxModule
   ],
   providers: [
     AuthenticateService

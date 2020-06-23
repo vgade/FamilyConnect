@@ -7,11 +7,17 @@ export class Family implements Deserializable{
     about:string;
     uid:string;
     pic:string;
+    picUrl:string;
     members:Member[];
     memberIds:string[];
+    selected:boolean;
 
     deserialize(input: any) {
         Object.assign(this, input);
+        if(!this.pic){
+            this.pic = "./assets/images/family-default.png";
+            this.picUrl = "./assets/images/family-default.png";
+        }
         return this;
     }
 }

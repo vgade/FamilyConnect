@@ -1,0 +1,17 @@
+<div class="search-family">
+    <mat-toolbar>
+        <mat-toolbar-row class="spacer">
+            <button mat-mini-fab color="primary" (click)="cancelHandler()">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+            <input class="search-box" type="text" placeholder="Family Name..." (keyup)="searchFamilies($event)">
+            <button mat-mini-fab color="primary" *ngIf="selectionMode" (click)="doneSelection()">
+                <mat-icon>done</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="px-3">
+        <app-family-list title = "Matching Families" [enableAddFamily]="false" [selectionMode] = "selectionMode" [families]="families"></app-family-list>
+    </div>
+    
+</div>
