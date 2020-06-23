@@ -35,8 +35,11 @@ export class MemberListComponent implements OnInit {
   }
 
   viewMember(member:Member){
-    this.memberSer.memberDetail = member;
-    this.router.navigate(['member-detail']);
+    if(!this.selectionMode){
+      this.memberSer.memberDetail = member;
+      this.router.navigate(['member-detail']);
+    }
+    
   }
 
   searchMembers(){

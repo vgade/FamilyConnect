@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "family-connect",
-    "public": "build",
+    "public": "dist/FamilyConnect",
     "ignore": [
       "firebase.json",
       "**/.*",

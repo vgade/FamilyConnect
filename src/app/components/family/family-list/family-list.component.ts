@@ -35,8 +35,10 @@ export class FamilyListComponent implements OnInit {
   }
 
   viewFamily(family:Family){
-    this.familySer.familyDetail = family;
-    this.router.navigate(['family-detail']);
+    if(!this.selectionMode){
+      this.familySer.familyDetail = family;
+      this.router.navigate(['family-detail']);
+    }
   }
 
   searchFamilies(){
