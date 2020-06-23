@@ -12,6 +12,8 @@ import { ImageService } from '@services/image/image.service';
 })
 export class FamilyService {
 
+  familyDetail:Family;
+
   constructor(private authenticateSer:AuthenticateService, private imageService:ImageService) { }
 
   fetchFamiles(memberId:string):Observable<Family>{
@@ -61,6 +63,20 @@ export class FamilyService {
       let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('members').doc(memberId);
       userRef.update({
         familyIds: firebase.firestore.FieldValue.arrayUnion(...families)
+      }).then(() => {
+        families.forEach((familyId:string) => {
+          this.addMembersToFamily(familyId, [memberId]);
+        })
+        resolve();
+      });
+    })
+  }
+
+  addMembersToFamily(familyId:string, memberIds:string[]): Promise<Member> {
+    return new Promise((resolve, reject) => {
+      let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('families').doc(familyId);
+      userRef.update({
+        memberIds: firebase.firestore.FieldValue.arrayUnion(memberIds)
       }).then(() => {
         resolve();
       });

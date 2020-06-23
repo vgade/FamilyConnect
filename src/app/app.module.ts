@@ -24,6 +24,8 @@ import { CreateFamilyComponent } from './components/family/create-family/create-
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
 import { MemberListComponent } from './components/member/member-list/member-list.component';
 import { SearchMemberComponent } from './components/member/search-member/search-member.component';
+import { FamilyDetailComponent } from './components/family/family-detail/family-detail.component';
+import { MemberDetailComponent } from './components/member/member-detail/member-detail.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { SearchMemberComponent } from './components/member/search-member/search-
     SearchFamilyComponent,
     ImageUploaderComponent,
     MemberListComponent,
-    SearchMemberComponent
+    SearchMemberComponent,
+    FamilyDetailComponent,
+    MemberDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Member } from '@app/models/member.model';
+import { MemberService } from '@app/services/member/member.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-member-list',
@@ -23,7 +25,7 @@ export class MemberListComponent implements OnInit {
   @Output()
   searchMember: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() { }
+  constructor(private memberSer:MemberService, private router:Router) { }
 
   ngOnInit(): void {
     if(!this.members){
@@ -32,8 +34,9 @@ export class MemberListComponent implements OnInit {
   
   }
 
-  viewMember(family:Member){
-
+  viewMember(member:Member){
+    this.memberSer.memberDetail = member;
+    this.router.navigate(['member-detail']);
   }
 
   searchMembers(){

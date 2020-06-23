@@ -25,10 +25,10 @@
                 </div>
             </div>
             <div class="mt-3">
-                <app-member-list title = "Favourites" [enableAddMember]="true" [members]="favourites" (searchMember) = "searchMembers()"></app-member-list>
+                <app-member-list title = "Favourites" [selectionMode]= "false" [enableAddMember]="true" [members]="favourites" (searchMember) = "searchMembers()"></app-member-list>
             </div>
             <div>
-                <app-family-list title = "Your Families" [enableAddFamily]="true" [families]="families" (searchFamily) = "searchFamilies()"></app-family-list>
+                <app-family-list title = "Your Families" [enableAddFamily]="true" [selectionMode] = "false" [families]="families" (searchFamily) = "searchFamilies()"></app-family-list>
             </div>
         </div>
     </div>

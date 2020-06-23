@@ -3,9 +3,29 @@
 @import '~bootstrap/scss/bootstrap-reboot';
 @import '~bootstrap/scss/bootstrap-grid';
 
+@font-face {
+    font-family: "ubuntu";
+    src: url("assets/fonts/Ubuntu-Regular.ttf");
+  }
+  
+  @font-face {
+    font-family: "ubuntu-medium";
+    src: url("assets/fonts/Ubuntu-Medium.ttf");
+  }
+  
+  @font-face {
+    font-family: "ubuntu-light";
+    src: url("assets/fonts/Ubuntu-Light.ttf");
+  }
+
+  
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: ubuntu }
+div, label, span{
+    font-family: ubuntu
+}
 h1,h2,h3,h4{
+    font-family: ubuntu-medium;
     margin-bottom: 0px !important;
 }
 

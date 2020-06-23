@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Family } from '@app/models/family.model';
+import { FamilyService } from '@app/services/family/family.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-family-list',
@@ -23,7 +25,7 @@ export class FamilyListComponent implements OnInit {
   @Output()
   searchFamily: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() { }
+  constructor(private familySer:FamilyService, private router:Router) { }
 
   ngOnInit(): void {
     if(!this.families){
@@ -33,7 +35,8 @@ export class FamilyListComponent implements OnInit {
   }
 
   viewFamily(family:Family){
-
+    this.familySer.familyDetail = family;
+    this.router.navigate(['family-detail']);
   }
 
   searchFamilies(){

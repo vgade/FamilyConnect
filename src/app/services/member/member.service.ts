@@ -11,6 +11,8 @@ import { ImageService } from '../image/image.service';
 })
 export class MemberService {
 
+  memberDetail:Member;
+  
   constructor(private imageService:ImageService) { }
 
   updateMember(){
@@ -42,6 +44,20 @@ export class MemberService {
       userRef.update({
         memberIds: firebase.firestore.FieldValue.arrayUnion(memberIds)
       }).then(() => {
+        memberIds.forEach((memberId:string) => {
+          this.addFamiliesToMember(memberId, [familyId]);
+        })
+        resolve();
+      });
+    })
+  }
+
+  addFamiliesToMember(memberId:string, families:string[]): Promise<Member> {
+    return new Promise((resolve, reject) => {
+      let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('members').doc(memberId);
+      userRef.update({
+        familyIds: firebase.firestore.FieldValue.arrayUnion(...families)
+      }).then(() => {
         resolve();
       });
     })
@@ -61,7 +77,7 @@ export class MemberService {
               member.deserialize(queryData.data());
               member.uid = queryData.id;
               subscriber.next(member);
-              this.imageService.getDownloadURL(member.pic);
+              this.fetchImage(member);
             });
           });
         }
@@ -94,7 +110,7 @@ export class MemberService {
               member.deserialize(queryData.data());
               member.uid = queryData.id;
               subscriber.next(member);
-              this.fetchImage(member);
+              this.fetchImage(member);  
             });
           });
         }
