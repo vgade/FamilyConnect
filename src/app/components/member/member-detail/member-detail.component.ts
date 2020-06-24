@@ -51,8 +51,11 @@ export class MemberDetailComponent implements OnInit {
     this.isSearchFamily = false;
   }
 
-  familiesSelected(event){
-
+  familiesSelected(familes:Family[]){
+    this.familySer.familiesSelected(familes, this.member.uid).then(() =>{
+      this.fetchFamilies();
+      this.isSearchFamily = false;
+    })
   }
 
 }

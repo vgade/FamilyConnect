@@ -5,8 +5,8 @@
                 <button mat-mini-fab color="primary" >
                     <mat-icon>menu</mat-icon>
                 </button>
-                <span >My Family</span>
-                <button mat-mini-fab color="primary" >
+                <span class="toolbar-header">My Family</span>
+                <button mat-mini-fab color="primary" (click)="search()">
                     <mat-icon>search</mat-icon>
                 </button>
             </mat-toolbar-row>
@@ -27,8 +27,8 @@
             <div class="mt-3">
                 <app-member-list title = "Favourites" [selectionMode]= "false" [enableAddMember]="true" [members]="favourites" (searchMember) = "searchMembers()"></app-member-list>
             </div>
-            <div>
-                <app-family-list title = "Your Families" [enableAddFamily]="true" [selectionMode] = "false" [families]="families" (searchFamily) = "searchFamilies()"></app-family-list>
+            <div class="mt-3">
+                <app-family-list title = "Your Families" [member]="user" [removeMode]="true" [enableAddFamily]="true" [selectionMode] = "false" [families]="families" (searchFamily) = "searchFamilies()"></app-family-list>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
     <div *ngIf="isAddFamily">
         <app-search-family [selectionMode]="true" (cancel) = "cancelAddFamily()" (selected)="familiesSelected($event)"></app-search-family>
     </div>
-    <div *ngIf="!(isAddFamily || isAddMember)">
+    <div class="sign-out-div mt-3" *ngIf="!(isAddFamily || isAddMember)">
         <button class="sign-in-btn" mat-flat-button color="primary" (click)="signOut()">Sign Out</button>
     </div>
 </div>

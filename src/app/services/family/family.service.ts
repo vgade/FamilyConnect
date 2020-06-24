@@ -4,7 +4,7 @@ import { Family } from '@app/models/family.model';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { Member } from '@app/models/member.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ImageService } from '@services/image/image.service';
 
 @Injectable({
@@ -13,6 +13,7 @@ import { ImageService } from '@services/image/image.service';
 export class FamilyService {
 
   familyDetail:Family;
+  searchSubs:Subscription;
 
   constructor(private authenticateSer:AuthenticateService, private imageService:ImageService) { }
 
@@ -76,27 +77,75 @@ export class FamilyService {
     return new Promise((resolve, reject) => {
       let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('families').doc(familyId);
       userRef.update({
-        memberIds: firebase.firestore.FieldValue.arrayUnion(memberIds)
+        memberIds: firebase.firestore.FieldValue.arrayUnion(...memberIds)
       }).then(() => {
         resolve();
       });
     })
   }
 
-  searchFamilies(name:string): Observable<Family>{
+  fetchAllFamilies(): Observable<Family>{
     return new Observable((subscriber) => {
-      let familyRef:firebase.firestore.Query = firebase.firestore().collection('families').where('name', '>=', name);
+      let familyRef:firebase.firestore.Query = firebase.firestore().collection('families');
       familyRef.get().then((querySnapshot:firebase.firestore.QuerySnapshot)=>{
         if(querySnapshot.size > 0){
           let counter = 1;
           querySnapshot.forEach((queryData:firebase.firestore.QueryDocumentSnapshot)=>{
             let family:Family = new Family().deserialize(queryData.data());
             family.uid = queryData.id;
+            counter++;
             subscriber.next(family);
             this.fetchImage(family);
+            if(counter > querySnapshot.size){
+              subscriber.complete();
+            }
           })
         }
       })
     });
+  }
+
+  searchFamilies(name:string): Promise<Family[]>{
+    let families:Family[] = [];
+    return new Promise((resolve, reject) => {
+      this.searchSubs = this.fetchAllFamilies().subscribe({
+        next: (family:Family) => {
+          families.push(family);
+        },
+        complete: () =>{
+          families = families.filter((familiy:Family) => {
+            let familyName:string = familiy.name.toLowerCase();
+            name = name.toLowerCase();
+            return familyName.indexOf(name) !== -1;
+          })
+          resolve(families);
+          this.searchSubs.unsubscribe();
+        }
+      })
+    })
+  }
+
+  familiesSelected(families:Family[], uid:string):Promise<any>{
+    return new Promise((resolve, reject) => {
+      let newFamilyIds:string[]=[];
+      families.forEach((family:Family)=>{
+        newFamilyIds.push(family.uid);
+      });
+      this.addNewFamilies(uid, newFamilyIds).then(() => {
+        alert("Families Added Successfully");
+        resolve();
+      });
+    });
+  }
+
+  removeFamily(memberId:string, family:Family): Promise<Family>{
+    return new Promise((resolve, reject) => {
+      let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('members').doc(memberId);
+      userRef.update({
+        familyIds: firebase.firestore.FieldValue.arrayRemove(...[family.uid])
+      }).then(() => {
+        resolve(family);
+      });
+    })
   }
 }

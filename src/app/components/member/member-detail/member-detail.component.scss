@@ -1,0 +1,20 @@
+.meber-detail-container{
+    .detail{
+        width: 80%;
+        margin:auto;
+        border-top: 1px solid #ccc;
+    }
+    .prop{
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        .label{
+            width: 120px;
+            color: #717171;
+        }
+        .value{
+            font-weight: bold;
+        }
+    }
+    
+}

@@ -20,30 +20,45 @@
 
   
 html, body { height: 100%; }
+body{
+    max-width: 400px;
+    margin: auto !important;
+    // border-left: 1px solid #e8e8e8;
+    // border-right: 1px solid #e8e8e8;
+}
 body { margin: 0; font-family: ubuntu }
 div, label, span{
     font-family: ubuntu
 }
-h1,h2,h3,h4{
+h1,h2,h3,h4, h5{
     font-family: ubuntu-medium;
     margin-bottom: 0px !important;
 }
 
+input{
+    font-family: ubuntu;
+    font-size: 1rem;
+}
+
+.toolbar-header{
+    font-family: ubuntu-medium !important;
+}
+
 .big-image{
-    width: 175px;
-    height: 175px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
 }
 
 .small-image{
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
 }
 
 .xsmall-image{
-    width: 75px;
-    height: 75px;
+    width: 50px;
+    height: 50px;
 }
 
 .form-field{

@@ -1,5 +1,5 @@
 <div class="search-family">
-    <mat-toolbar>
+    <mat-toolbar *ngIf="!hideToolBar">
         <mat-toolbar-row class="spacer">
             <button mat-mini-fab color="primary" (click)="cancelHandler()">
                 <mat-icon>keyboard_arrow_left</mat-icon>
@@ -10,6 +10,9 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
+    <div class="search-input mb-3" *ngIf="hideToolBar">
+        <input class="search-box" type="text" placeholder="Family Name..." (keyup)="searchFamilies($event)">
+    </div>
     <div class="px-3">
         <app-family-list title = "Matching Families" [enableAddFamily]="false" [selectionMode] = "selectionMode" [families]="families"></app-family-list>
     </div>

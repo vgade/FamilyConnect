@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 import { ImageService } from '@app/services/image/image.service';
 import { EventEmitter } from 'protractor';
+import { Member } from '@app/models/member.model';
 
 @Component({
   selector: 'app-image-uploader',
@@ -33,6 +34,13 @@ export class ImageUploaderComponent implements OnInit {
       this.uploading = false;
       this.imageService.getDownloadURL(this.object.pic).then((url) => {
         this.object.picUrl = url;
+        if(this.object.uid){
+          if(this.object instanceof Member){
+            this.imageService.updateDp(this.object, 'members');
+          }else{
+            this.imageService.updateDp(this.object, 'families');
+          }
+        }
       });
     });
   }

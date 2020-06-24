@@ -1,42 +1,39 @@
-<div *ngIf="!isSearchFamily">
+<div *ngIf="!isSearchFamily" class="meber-detail-container">
     <mat-toolbar>
         <mat-toolbar-row class="spacer">
             <button mat-mini-fab color="primary" (click)="cancel()">
                 <mat-icon>keyboard_arrow_left</mat-icon>
             </button>
-            <span >New Member</span>
+            <div class="toolbar-header">{{member.firstName}} {{member.lastName}}</div>
             <button mat-mini-fab color="primary" (click)="edit()" >
-                <mat-icon>save</mat-icon>
+                <mat-icon>edit</mat-icon>
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div>
+    <div class="mt-3">
         <app-image-uploader [object]="member" [upload]="true"></app-image-uploader>
-        <mat-grid-list class="mt-3  " cols="2" rowHeight="50px" >
-            <mat-grid-tile>
-                <div>
-                    <label>Name</label>
-                    <div>{{member.firstName}} {{member.lastName}}</div>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <div>
-                    <label>Phone Number</label>
-                    <div>{{member.phone}}</div>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <div>
-                    <label>Email</label>
-                    <div>{{member.email}}</div>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <div>
-                    <label>Date Of Birth</label>
-                    <div>{{member.dob}}</div>
-                </div>
-            </mat-grid-tile>
+        <div class="detail pt-3 mt-3">
+            <div class="prop">
+                <!-- <label class="label">Phone</label> -->
+                <span class="value pt-2">{{member.phone}}</span>
+                <button class="ml-3" mat-mini-fab color="primary">
+                    <mat-icon>phone_enabled</mat-icon>
+                </button>
+            </div>
+        
+            <div class="prop">
+                <!-- <label class="label">Email</label> -->
+                <span class="value pt-2">{{member.email}}</span>
+                <button class="ml-3" mat-mini-fab color="primary">
+                    <mat-icon>email</mat-icon>
+                </button>
+            </div>
+            <div class="prop">
+                <!-- <label class="label">Date Of Birth</label> -->
+                <span class="value pt-2">{{member.dob}}</span>
+            </div>
+        </div>
+                
 
             <!-- <mat-grid-tile>
                 <mat-form-field appearance="outline">
@@ -74,9 +71,8 @@
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
             </mat-grid-tile> -->
-        </mat-grid-list>
         <div class="px-3">
-            <app-family-list title = "Families" [enableAddFamily]="true" [families]="member.families" (searchFamily) = "searchFamilies()"></app-family-list>
+            <app-family-list title = "Families" [removeMode]="true" [member]="member" [enableAddFamily]="true" [families]="member.families" (searchFamily) = "searchFamilies()"></app-family-list>
         </div>
     </div>
 </div>

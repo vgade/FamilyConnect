@@ -26,6 +26,8 @@ import { MemberListComponent } from './components/member/member-list/member-list
 import { SearchMemberComponent } from './components/member/search-member/search-member.component';
 import { FamilyDetailComponent } from './components/family/family-detail/family-detail.component';
 import { MemberDetailComponent } from './components/member/member-detail/member-detail.component';
+import { SearchComponent } from './components/search/search.component';
+import {MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { MemberDetailComponent } from './components/member/member-detail/member-
     MemberListComponent,
     SearchMemberComponent,
     FamilyDetailComponent,
-    MemberDetailComponent
+    MemberDetailComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +59,8 @@ import { MemberDetailComponent } from './components/member/member-detail/member-
     MatButtonModule,
     MatToolbarModule,
     MatGridListModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatRadioModule
   ],
   providers: [
     AuthenticateService

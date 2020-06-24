@@ -1,18 +1,18 @@
-<div class="mt-3 member-list-container" >
-    <div class="header">
-        <h3>{{title}}</h3>
+<div class="member-list-container" >
+    <div class="header mb-3">
+        <h5 class="mt-2">{{title}}</h5>
         <button *ngIf="enableAddMember" mat-button color="primary" (click)="searchMembers()">
             <mat-icon>add_circle</mat-icon>
             Member
         </button>
     </div>
-    
     <div class="no-data py-3" *ngIf="members.length == 0">No Members</div>
-    <mat-grid-list cols="2" rowHeight="1:1" >
+    <mat-grid-list cols="2  " rowHeight="105px" gutterSize="5px">
         <mat-grid-tile *ngFor="let member of members">
-            <div class="member-item" (click)="viewMember(member)">
-                <mat-checkbox (change) = "memberSelectionChange($event, member)" *ngIf="selectionMode"></mat-checkbox>
-                <app-image-uploader [object]="member" [upload]="false"></app-image-uploader>
+            <div class="member-item">
+                <mat-checkbox class="check" (change) = "memberSelectionChange($event, member)" *ngIf="selectionMode"></mat-checkbox>
+                <mat-icon class="check" (click) = "memberRemove(member)" *ngIf="removeMode">remove_circle_outline</mat-icon>
+                <app-image-uploader (click)="viewMember(member)" [object]="member" [upload]="false"></app-image-uploader>
                 <div>{{member.firstName}} {{member.lastName}} </div>
             </div>
         </mat-grid-tile>

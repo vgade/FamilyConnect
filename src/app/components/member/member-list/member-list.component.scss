@@ -5,11 +5,18 @@
         border-bottom: 1px solid #ccc;
     }
     .member-item{
+        position: relative;
+        min-width: 150px;
+        .check{
+            position: absolute;
+            right: 5px;
+        }
         div{
             text-align: center;
         }
     }
     .no-data{
+        font-family: ubuntu-medium;
         text-align: center;
     }
 }

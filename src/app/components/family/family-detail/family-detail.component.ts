@@ -14,7 +14,7 @@ import { Member } from '@app/models/member.model';
 export class FamilyDetailComponent implements OnInit {
 
   family:Family;
-
+  isSearchMember:boolean;
   memberSubscription:Subscription;
 
   constructor(private router:Router, private familySer:FamilyService, private memberSer:MemberService) { }
@@ -36,6 +36,21 @@ export class FamilyDetailComponent implements OnInit {
 
   edit(){
 
+  }
+
+  membersSelected(members:Member[]){
+    this.memberSer.membersSelected(members, this.family.uid).then(() => {
+      this.fetchMembers();
+      this.isSearchMember = false;
+    })
+  }
+
+  cancelAddMember(){
+    this.isSearchMember = false;
+  }
+
+  searchMembers(){
+    this.isSearchMember = true;
   }
 
   cancel(){

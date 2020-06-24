@@ -21,9 +21,10 @@ export class SearchFamilyComponent implements OnInit {
   @Input()
   selectionMode:boolean;
 
-  families:Family[];
+  @Input()
+  hideToolBar:boolean;
 
-  searchSubscription:Subscription;
+  families:Family[];
 
   constructor(private familySer:FamilyService, router:Router) { }
 
@@ -31,16 +32,11 @@ export class SearchFamilyComponent implements OnInit {
   }
 
   searchFamilies(event){
-    if(this.searchSubscription){
-      this.searchSubscription.unsubscribe();
-    }
     let searchText:string = event.target.value;
     if(searchText.length >= 2){
       this.families = [];
-      this.searchSubscription = this.familySer.searchFamilies(searchText).subscribe({
-        next: (family:Family)=>{
-          this.families.push(family);
-        }
+      this.familySer.searchFamilies(searchText).then((families:Family[]) => {
+        this.families = families;
       });
     }
     

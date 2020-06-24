@@ -1,5 +1,5 @@
 <div class="search-member">
-    <mat-toolbar>
+    <mat-toolbar *ngIf="!hideToolBar">
         <mat-toolbar-row class="spacer">
             <button mat-mini-fab color="primary" (click)="cancelHandler()">
                 <mat-icon>keyboard_arrow_left</mat-icon>
@@ -10,7 +10,10 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div class="mt-3 px-3">
+    <div class="search-input mb-3" *ngIf="hideToolBar">
+        <input  class="search-box" type="text" placeholder="Member Name..." (keyup)="searchMembers($event)">
+    </div>
+    <div class="px-3">
         <app-member-list title = "Matching Members" [enableAddMember]="false" [selectionMode] = "selectionMode" [members]="members"></app-member-list>
     </div>
     

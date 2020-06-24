@@ -1,0 +1,23 @@
+<div>
+    <mat-toolbar>
+        <mat-toolbar-row >
+            <button mat-mini-fab color="primary" (click)="cancelHandler()">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+            <div class="toolbar-header search">Search</div>
+            <!-- <button mat-mini-fab color="primary" *ngIf="selectionMode" (click)="doneSelection()">
+                <mat-icon>done</mat-icon>
+            </button> -->
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <mat-radio-group class="search-types" value="" (change)="searchChanged($event)">
+        <mat-radio-button selected value="member">Search Member</mat-radio-button>
+        <mat-radio-button value="family">Search Family</mat-radio-button>
+    </mat-radio-group>
+    <div *ngIf="isSearchMember">
+        <app-search-member [hideToolBar]="true" [selectionMode]="false"></app-search-member>
+    </div>
+    <div *ngIf="!isSearchMember">
+        <app-search-family [hideToolBar]="true" [selectionMode]="false"></app-search-family>
+    </div>
+</div>

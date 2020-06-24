@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Member } from '@app/models/member.model';
 import { MemberService } from '@app/services/member/member.service';
 import { Router } from '@angular/router';
+import { Family } from '@app/models/family.model';
 
 @Component({
   selector: 'app-member-list',
@@ -15,6 +16,12 @@ export class MemberListComponent implements OnInit {
 
   @Input()
   selectionMode:boolean;
+
+  @Input()
+  removeMode:boolean;
+
+  @Input()
+  family:Family;
 
   @Input()
   members:Member[] = [];
@@ -50,5 +57,20 @@ export class MemberListComponent implements OnInit {
     member.selected = event.checked;
   }
 
+  memberRemove(member:Member){
+    if(this.family.uid){
+      this.memberSer.removeMember(this.family.uid, member).then((member:Member) => {
+        this.members = this.members.filter((memberInp:Member) => {
+          return member != memberInp;
+        })
+        this.family.members = this.members;
+      })
+    }else{
+      this.members = this.members.filter((memberInp:Member) => {
+        return member != memberInp;
+      })
+      this.family.members = this.members;
+    }
+  }
 
 }

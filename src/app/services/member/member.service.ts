@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Member } from '@app/models/member.model';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Family } from '@app/models/family.model';
 import { ImageService } from '../image/image.service';
 
@@ -12,7 +12,8 @@ import { ImageService } from '../image/image.service';
 export class MemberService {
 
   memberDetail:Member;
-  
+  searchSubs:Subscription;
+
   constructor(private imageService:ImageService) { }
 
   updateMember(){
@@ -42,7 +43,7 @@ export class MemberService {
     return new Promise((resolve, reject) => {
       let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('families').doc(familyId);
       userRef.update({
-        memberIds: firebase.firestore.FieldValue.arrayUnion(memberIds)
+        memberIds: firebase.firestore.FieldValue.arrayUnion(...memberIds)
       }).then(() => {
         memberIds.forEach((memberId:string) => {
           this.addFamiliesToMember(memberId, [familyId]);
@@ -118,21 +119,46 @@ export class MemberService {
     });
   }
 
-  searchMembers(name:string): Observable<Member>{
+  fetchAllMembers(): Observable<Member>{
     return new Observable((subscriber) => {
-      let memberRef:firebase.firestore.Query = firebase.firestore().collection('members').where('firstName', '>=', name);
+      let memberRef:firebase.firestore.Query = firebase.firestore().collection('members');
       memberRef.get().then((querySnapshot:firebase.firestore.QuerySnapshot)=>{
         if(querySnapshot.size > 0){
           let counter = 1;
           querySnapshot.forEach((queryData:firebase.firestore.QueryDocumentSnapshot)=>{
             let member:Member = new Member().deserialize(queryData.data());
             member.uid = queryData.id;
+            counter++;
             subscriber.next(member);
             this.fetchImage(member);
+            if(counter > querySnapshot.size){
+              subscriber.complete();
+            }
           })
         }
       })
     });
+  }
+
+  searchMembers(name:string): Promise<Member[]>{
+    let members:Member[] = [];
+    return new Promise((resolve, reject) => {
+      this.searchSubs = this.fetchAllMembers().subscribe({
+        next: (member) => {
+          members.push(member);
+        },
+        complete: () =>{
+          members = members.filter((member:Member) => {
+            let firstName:string = member.firstName.toLowerCase();
+            let lastName:string = member.lastName.toLowerCase();
+            name = name.toLowerCase();
+            return firstName.indexOf(name) !== -1 || lastName.indexOf(name) !== -1;
+          })
+          resolve(members);
+          this.searchSubs.unsubscribe();
+        }
+      })
+    })
   }
 
   fetchImage(member:Member){
@@ -143,6 +169,29 @@ export class MemberService {
         member.picUrl = url;
       })
     }
-    
+  }
+
+  membersSelected(members:Member[], uid:string): Promise<any>{
+    return new Promise((resolve, reject) => {
+      let newMemberIds:string[]=[];
+      members.forEach((member:Member)=>{
+        newMemberIds.push(member.uid);
+      });
+      this.addNewMembers(uid, newMemberIds).then(() => {
+        alert("Favourites Members Added Successfully");
+        resolve();
+      });
+    });
+  }
+
+  removeMember(familyId:string, member:Member): Promise<Member>{
+    return new Promise((resolve, reject) => {
+      let userRef:firebase.firestore.DocumentReference = firebase.firestore().collection('families').doc(familyId);
+      userRef.update({
+        memberIds: firebase.firestore.FieldValue.arrayRemove(...[member.uid])
+      }).then(() => {
+        resolve(member);
+      });
+    })
   }
 }

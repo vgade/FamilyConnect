@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,4 +33,19 @@ export class ImageService {
           resolve(path);
         });
      })
-  }}
+  }
+
+  updateDp(object:any, collectionType:string){
+    let objectRef:firebase.firestore.DocumentReference = firebase.firestore().collection(collectionType).doc(object.uid);
+    let setOptions:firebase.firestore.SetOptions = {
+      merge: true
+    };
+
+    objectRef.set({
+      pic : object.pic
+    }, setOptions);
+  }
+
+};
+
+

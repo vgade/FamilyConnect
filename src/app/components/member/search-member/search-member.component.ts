@@ -20,9 +20,10 @@ export class SearchMemberComponent implements OnInit {
   @Input()
   selectionMode:boolean;
 
-  members:Member[];
+  @Input()
+  hideToolBar:boolean;
 
-  searchSubscription:Subscription;
+  members:Member[];
 
   constructor(private memberSer:MemberService, router:Router) { }
 
@@ -30,19 +31,13 @@ export class SearchMemberComponent implements OnInit {
   }
 
   searchMembers(event){
-    if(this.searchSubscription){
-      this.searchSubscription.unsubscribe();
-    }
     let searchText:string = event.target.value;
     if(searchText.length >= 2){
       this.members = [];
-      this.searchSubscription = this.memberSer.searchMembers(searchText).subscribe({
-        next: (member:Member)=>{
-          this.members.push(member);
-        }
+      this.memberSer.searchMembers(searchText).then((members:Member[]) => {
+        this.members = members;
       });
     }
-    
   }
 
   viewMember(){

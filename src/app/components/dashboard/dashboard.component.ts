@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { FamilyService } from '@app/services/family/family.service';
 import { FirebaseService } from '@app/services/firebase/firebase.service';
 import { MemberService } from '@app/services/member/member.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +20,9 @@ export class DashboardComponent implements OnInit {
   user:Member;
   favourites:Member[] =[];
   families:Family[] = [];
+
+  favSubs:Subscription;
+  familySubs:Subscription;
 
   constructor(private authenticateService:AuthenticateService, private router:Router,
     private familySer:FamilyService, private firebaseService:FirebaseService, private memberSer:MemberService) { }
@@ -40,9 +44,12 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchFavourites(){
+    if(this.favSubs){
+      this.favSubs.unsubscribe();
+    }
     this.favourites = [];
     let that = this;
-    this.memberSer.fetchFavourites(this.authenticateService.loggedInUser.uid).subscribe(
+    this.favSubs = this.memberSer.fetchFavourites(this.authenticateService.loggedInUser.uid).subscribe(
       {
         next(member:Member) { 
           that.favourites.push(member);
@@ -54,9 +61,12 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchFamilies(){
+    if(this.familySubs){
+      this.familySubs.unsubscribe();
+    }
     this.families = [];
     let that = this;
-    this.familySer.fetchFamiles(this.authenticateService.loggedInUser.uid).subscribe(
+    this.familySubs = this.familySer.fetchFamiles(this.authenticateService.loggedInUser.uid).subscribe(
       {
         next(family:Family) { 
           that.families.push(family);
@@ -88,15 +98,10 @@ export class DashboardComponent implements OnInit {
   }
   
   familiesSelected(families:Family[]){
-    let newFamilyIds:string[]=[];
-    families.forEach((family:Family)=>{
-      newFamilyIds.push(family.uid);
-    });
-    this.familySer.addNewFamilies(this.authenticateService.loggedInUser.uid, newFamilyIds).then(() => {
-      alert("Families Added Successfully");
+    this.familySer.familiesSelected(families, this.authenticateService.loggedInUser.uid).then(()=>{
       this.fetchFamilies();
-    });
-    this.isAddFamily = false;
+      this.isAddFamily = false;
+    })
   }
 
   membersSelected(members:Member[]){
@@ -109,6 +114,10 @@ export class DashboardComponent implements OnInit {
       this.fetchFavourites();
     });
     this.isAddMember = false;
+  }
+
+  search(){
+    this.router.navigate(['search']);
   }
 
   cancelAddFamily(){

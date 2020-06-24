@@ -1,4 +1,4 @@
-<div class="view-family-container">
+<div *ngIf="!isSearchMember" class="view-family-container">
     <mat-toolbar>
         <mat-toolbar-row class="spacer">
             <button mat-mini-fab color="primary" (click)="cancel()">
@@ -9,41 +9,35 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div>
-        <app-image-uploader [object]="family" [upload]="true"></app-image-uploader>
-        <mat-grid-list class="mt-3  " cols="1" rowHeight="100px" >
-            <mat-grid-tile>
-                <div>
-                    <label>Family Name</label>
-                    <div>{{family.name}}</div>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <div>
-                    <label>About Family</label>
-                    <div>{{family.about}}</div>
-                </div>
-            </mat-grid-tile>
-        </mat-grid-list>
-        <!-- <mat-grid-list class="mt-3  " cols="1" rowHeight="100px" >
-            <mat-grid-tile>
-                <mat-form-field class="form-field" appearance="outline">
-                    <mat-label>Family Name</mat-label>
-                    <input matInput placeholder="Family Name" [(ngModel)]="family.name" required >
-                    <mat-hint></mat-hint>
-                </mat-form-field>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <mat-form-field class="form-field"  appearance="outline">
-                    <mat-label>About</mat-label>
-                    <textarea matInput placeholder="About Family" [(ngModel)]="family.about" ></textarea>
-                    <mat-hint></mat-hint>
-                </mat-form-field>
-            </mat-grid-tile>
-        </mat-grid-list> -->
+    <div class="px-3 pt-3">
+        <div>
+            <app-image-uploader [object]="family" [upload]="true"></app-image-uploader>
+            <div class="family-name mt-2 pb-2">{{family.name}} Family</div>
+            <div class="about mt-3">{{family.about}}</div>
+            <!-- <mat-grid-list class="mt-3  " cols="1" rowHeight="100px" >
+                <mat-grid-tile>
+                    <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Family Name</mat-label>
+                        <input matInput placeholder="Family Name" [(ngModel)]="family.name" required >
+                        <mat-hint></mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-form-field class="form-field"  appearance="outline">
+                        <mat-label>About</mat-label>
+                        <textarea matInput placeholder="About Family" [(ngModel)]="family.about" ></textarea>
+                        <mat-hint></mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+            </mat-grid-list> -->
+        </div>
+        <div class="mt-3">
+            <app-member-list title = "Members" [family]="family" [removeMode]="true" [enableAddMember]="true" (searchMember)="searchMembers()" [selectionMode] = "false" [members]="family.members"></app-member-list>
+        </div>
     </div>
-    <div class="mt-3 px-3">
-        <app-member-list title = "Members" [enableAddMember]="true" [selectionMode] = "false" [members]="family.members"></app-member-list>
-    </div>
+    
+</div>
+<div *ngIf="isSearchMember">
+    <app-search-member [selectionMode]="true" (cancel) = "cancelAddMember()" (selected)="membersSelected($event)"></app-search-member>
 </div>
 
